@@ -15,6 +15,8 @@ export default function Index() {
   const [rev, setRev] = useState(0);
   const refresh = useCallback(() => setRev(r => r + 1), []);
 
+  useEffect(() => { seedDemoData(); }, []);
+
   const settings = store.getSettings();
   const photos = store.getPhotos();
   const wishes = store.getWishes();

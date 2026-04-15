@@ -1,6 +1,7 @@
 import { useState, useCallback, useEffect } from 'react';
 import { store } from '@/lib/store';
 import { seedDemoData } from '@/lib/seed';
+import Navbar from '@/components/Navbar';
 import HeroSection from '@/components/HeroSection';
 import PhotoGallery from '@/components/PhotoGallery';
 import WishesWall from '@/components/WishesWall';

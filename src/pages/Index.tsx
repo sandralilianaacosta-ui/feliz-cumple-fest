@@ -12,6 +12,7 @@ import ContactSection from '@/components/ContactSection';
 import MusicToggle from '@/components/MusicToggle';
 import AdminDashboard from '@/components/AdminDashboard';
 import CelebrationScreen from '@/components/CelebrationScreen';
+import QRScreen from '@/components/QRScreen';
 
 export default function Index() {
   const [rev, setRev] = useState(0);
@@ -26,9 +27,17 @@ export default function Index() {
 
   const isBirthday = Date.now() >= new Date(settings.birthdayDate + 'T00:00:00').getTime();
 
+  const urlParams = new URLSearchParams(window.location.search);
+  const forceCelebration = urlParams.has('celebration');
+  const showQR = urlParams.has('qr');
+
   void rev;
 
-  if (isBirthday && !skipCelebration) {
+  if (showQR) {
+    return <QRScreen />;
+  }
+
+  if ((isBirthday || forceCelebration) && !skipCelebration) {
     return <CelebrationScreen name={settings.name} onContinue={() => setSkipCelebration(true)} />;
   }
 

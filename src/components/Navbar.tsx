@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { Menu, X } from 'lucide-react';
 
 const links = [
+  { href: '#misa', label: '⛪ Misa' },
   { href: '#fotos', label: '📸 Fotos' },
   { href: '#deseos', label: '💌 Deseos' },
   { href: '#regalos', label: '🎁 Regalos' },

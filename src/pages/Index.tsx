@@ -13,6 +13,7 @@ import MusicToggle from '@/components/MusicToggle';
 import AdminDashboard from '@/components/AdminDashboard';
 import CelebrationScreen from '@/components/CelebrationScreen';
 import QRScreen from '@/components/QRScreen';
+import QRShareSection from '@/components/QRShareSection';
 
 export default function Index() {
   const [rev, setRev] = useState(0);
@@ -42,12 +43,13 @@ export default function Index() {
   }
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen">
       <Navbar name={settings.name} />
       <HeroSection settings={settings} />
       <MisaInvitation settings={settings} />
       <PhotoGallery photos={photos} onUpdate={refresh} />
       <WishesWall wishes={wishes} onUpdate={refresh} />
+      <QRShareSection />
       <GiftSection settings={settings} onUpdate={refresh} />
       <Timeline />
       <ContactSection />

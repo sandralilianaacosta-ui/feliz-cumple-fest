@@ -56,7 +56,7 @@ function set(key: string, value: unknown) {
 
 export const defaultSettings: Settings = {
   name: 'Victoria',
-  birthdayDate: '2026-05-15',
+  birthdayDate: '2026-08-18',
   heroMessage: '¡Estamos celebrando un día muy especial!',
   transferAlias: 'maria.cumple.2026',
   transferCBU: '0000003100000000000001',

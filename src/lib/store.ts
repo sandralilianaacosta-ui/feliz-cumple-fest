@@ -103,7 +103,11 @@ export const store = {
     set(KEYS.gifts, gifts);
   },
 
-  getSettings: (): Settings => get(KEYS.settings, defaultSettings),
+  getSettings: (): Settings => {
+    const s = get<Settings>(KEYS.settings, defaultSettings);
+    if (s.name === 'María') { s.name = 'Victoria'; set(KEYS.settings, s); }
+    return s;
+  },
   updateSettings: (s: Partial<Settings>) => {
     set(KEYS.settings, { ...get(KEYS.settings, defaultSettings), ...s });
   },

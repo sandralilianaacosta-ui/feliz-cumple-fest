@@ -4,6 +4,7 @@ import { seedDemoData } from '@/lib/seed';
 import Navbar from '@/components/Navbar';
 import HeroSection from '@/components/HeroSection';
 import PhotoGallery from '@/components/PhotoGallery';
+import MisaInvitation from '@/components/MisaInvitation';
 import WishesWall from '@/components/WishesWall';
 import GiftSection from '@/components/GiftSection';
 import Timeline from '@/components/Timeline';
@@ -28,6 +29,7 @@ export default function Index() {
     <div className="min-h-screen bg-background">
       <Navbar name={settings.name} />
       <HeroSection settings={settings} />
+      <MisaInvitation settings={settings} />
       <PhotoGallery photos={photos} onUpdate={refresh} />
       <WishesWall wishes={wishes} onUpdate={refresh} />
       <GiftSection settings={settings} onUpdate={refresh} />

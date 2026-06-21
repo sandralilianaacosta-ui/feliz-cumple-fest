@@ -55,7 +55,7 @@ function set(key: string, value: unknown) {
 }
 
 export const defaultSettings: Settings = {
-  name: 'María',
+  name: 'Victoria',
   birthdayDate: '2026-05-15',
   heroMessage: '¡Estamos celebrando un día muy especial!',
   transferAlias: 'maria.cumple.2026',
@@ -103,7 +103,11 @@ export const store = {
     set(KEYS.gifts, gifts);
   },
 
-  getSettings: (): Settings => get(KEYS.settings, defaultSettings),
+  getSettings: (): Settings => {
+    const s = get<Settings>(KEYS.settings, defaultSettings);
+    if (s.name === 'María') { s.name = 'Victoria'; set(KEYS.settings, s); }
+    return s;
+  },
   updateSettings: (s: Partial<Settings>) => {
     set(KEYS.settings, { ...get(KEYS.settings, defaultSettings), ...s });
   },

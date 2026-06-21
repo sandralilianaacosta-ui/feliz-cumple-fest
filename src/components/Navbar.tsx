@@ -5,6 +5,7 @@ const links = [
   { href: '#misa', label: '⛪ Misa' },
   { href: '#fotos', label: '📸 Fotos' },
   { href: '#deseos', label: '💌 Deseos' },
+  { href: '#qr', label: '🔗 Compartir' },
   { href: '#regalos', label: '🎁 Regalos' },
   { href: '#recuerdos', label: '🕰️ Recuerdos' },
   { href: '#contacto', label: '📞 Contacto' },

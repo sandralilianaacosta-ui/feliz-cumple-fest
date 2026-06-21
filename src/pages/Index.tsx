@@ -11,10 +11,12 @@ import Timeline from '@/components/Timeline';
 import ContactSection from '@/components/ContactSection';
 import MusicToggle from '@/components/MusicToggle';
 import AdminDashboard from '@/components/AdminDashboard';
+import CelebrationScreen from '@/components/CelebrationScreen';
 
 export default function Index() {
   const [rev, setRev] = useState(0);
   const refresh = useCallback(() => setRev(r => r + 1), []);
+  const [skipCelebration, setSkipCelebration] = useState(false);
 
   useEffect(() => { seedDemoData(); }, []);
 
@@ -22,8 +24,13 @@ export default function Index() {
   const photos = store.getPhotos();
   const wishes = store.getWishes();
 
-  // suppress unused warning
+  const isBirthday = Date.now() >= new Date(settings.birthdayDate + 'T00:00:00').getTime();
+
   void rev;
+
+  if (isBirthday && !skipCelebration) {
+    return <CelebrationScreen name={settings.name} onContinue={() => setSkipCelebration(true)} />;
+  }
 
   return (
     <div className="min-h-screen bg-background">
@@ -40,3 +47,4 @@ export default function Index() {
     </div>
   );
 }
+

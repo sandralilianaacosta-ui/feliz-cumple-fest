@@ -1,10 +1,12 @@
 import { useState } from 'react';
 import { Copy, Check, ExternalLink } from 'lucide-react';
-import { store, type Settings } from '@/lib/store';
+import { supabase } from '@/integrations/supabase/client';
+import { toast } from 'sonner';
+import type { LegacySettings } from '@/lib/party';
 
-interface Props { settings: Settings; onUpdate: () => void }
+interface Props { partyId: string; settings: LegacySettings; onUpdate: () => void }
 
-export default function GiftSection({ settings, onUpdate }: Props) {
+export default function GiftSection({ partyId, settings, onUpdate }: Props) {
   const [copied, setCopied] = useState<string | null>(null);
   const [envelopeName, setEnvelopeName] = useState('');
   const [envelopeMsg, setEnvelopeMsg] = useState('');
@@ -16,9 +18,13 @@ export default function GiftSection({ settings, onUpdate }: Props) {
     setTimeout(() => setCopied(null), 2000);
   };
 
-  const confirmEnvelope = () => {
+  const confirmEnvelope = async () => {
     if (!envelopeName.trim()) return;
-    store.addGift({ type: 'envelope', author: envelopeName.trim(), message: envelopeMsg || 'Regalo en sobre' });
+    const { error } = await supabase.from('gifts').insert({
+      party_id: partyId, type: 'envelope', author: envelopeName.trim(),
+      message: envelopeMsg || 'Regalo en sobre',
+    });
+    if (error) { toast.error('No se pudo confirmar'); return; }
     setEnvelopeName(''); setEnvelopeMsg('');
     setSent(true);
     setTimeout(() => setSent(false), 3000);
@@ -32,7 +38,6 @@ export default function GiftSection({ settings, onUpdate }: Props) {
         <p className="text-muted-foreground text-center mb-10">Si querés agasajar a {settings.name}, acá van algunas opciones</p>
 
         <div className="grid sm:grid-cols-2 gap-6">
-          {/* Transfer */}
           <div className="glass rounded-2xl p-6 space-y-4">
             <h3 className="font-heading text-xl font-semibold">💳 Transferencia</h3>
             <div>
@@ -55,7 +60,6 @@ export default function GiftSection({ settings, onUpdate }: Props) {
             </div>
           </div>
 
-          {/* Mercado Pago */}
           <div className="glass rounded-2xl p-6 space-y-4">
             <h3 className="font-heading text-xl font-semibold">📱 Mercado Pago</h3>
             <p className="text-sm text-muted-foreground">Podés enviar tu regalo por Mercado Pago de forma rápida y segura.</p>
@@ -65,7 +69,6 @@ export default function GiftSection({ settings, onUpdate }: Props) {
             </a>
           </div>
 
-          {/* Wishlist */}
           <div className="glass rounded-2xl p-6 space-y-4">
             <h3 className="font-heading text-xl font-semibold">📋 Lista de Deseos</h3>
             <ul className="space-y-2">
@@ -78,7 +81,6 @@ export default function GiftSection({ settings, onUpdate }: Props) {
             </ul>
           </div>
 
-          {/* Envelope */}
           <div className="glass rounded-2xl p-6 space-y-4">
             <h3 className="font-heading text-xl font-semibold">💌 Regalo en Sobre</h3>
             <p className="text-sm text-muted-foreground">¿Vas a traer un sobre al evento? Avisanos así lo esperamos.</p>

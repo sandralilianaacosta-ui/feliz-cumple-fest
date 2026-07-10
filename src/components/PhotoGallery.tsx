@@ -1,13 +1,17 @@
 import { useState, useRef } from 'react';
 import { Camera, Upload, X } from 'lucide-react';
-import { store, type Photo } from '@/lib/store';
+import { supabase } from '@/integrations/supabase/client';
+import { toast } from 'sonner';
 
-interface Props { onUpdate: () => void; photos: Photo[] }
+export interface PhotoItem { id: string; url: string; author: string; approved: boolean }
 
-export default function PhotoGallery({ photos, onUpdate }: Props) {
+interface Props { partyId: string; photos: PhotoItem[]; onUpdate: () => void }
+
+export default function PhotoGallery({ partyId, photos, onUpdate }: Props) {
   const [author, setAuthor] = useState('');
   const [preview, setPreview] = useState<string | null>(null);
   const [lightbox, setLightbox] = useState<string | null>(null);
+  const [busy, setBusy] = useState(false);
   const fileRef = useRef<HTMLInputElement>(null);
   const cameraRef = useRef<HTMLInputElement>(null);
 
@@ -21,11 +25,16 @@ export default function PhotoGallery({ photos, onUpdate }: Props) {
     reader.readAsDataURL(file);
   };
 
-  const submit = () => {
+  const submit = async () => {
     if (!preview || !author.trim()) return;
-    store.addPhoto({ dataUrl: preview, author: author.trim() });
-    setPreview(null);
-    setAuthor('');
+    setBusy(true);
+    const { error } = await supabase.from('photos').insert({
+      party_id: partyId, url: preview, author: author.trim(), approved: false,
+    });
+    setBusy(false);
+    if (error) { toast.error('No se pudo enviar la foto'); return; }
+    toast.success('Foto enviada. Será revisada antes de publicarse.');
+    setPreview(null); setAuthor('');
     onUpdate();
   };
 
@@ -51,7 +60,7 @@ export default function PhotoGallery({ photos, onUpdate }: Props) {
             <div className="space-y-3">
               <img src={preview} alt="Vista previa" className="w-full max-h-64 object-contain rounded-lg" />
               <div className="flex gap-2">
-                <button onClick={submit} className="flex-1 bg-primary text-primary-foreground py-2 rounded-lg font-medium">Enviar foto</button>
+                <button onClick={submit} disabled={busy} className="flex-1 bg-primary text-primary-foreground py-2 rounded-lg font-medium disabled:opacity-50">{busy ? 'Enviando…' : 'Enviar foto'}</button>
                 <button onClick={() => setPreview(null)} className="px-4 py-2 bg-muted rounded-lg text-muted-foreground">Cancelar</button>
               </div>
               <p className="text-xs text-muted-foreground text-center">Tu foto será revisada antes de publicarse ✨</p>
@@ -62,8 +71,8 @@ export default function PhotoGallery({ photos, onUpdate }: Props) {
         {approved.length > 0 ? (
           <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
             {approved.map(p => (
-              <button key={p.id} onClick={() => setLightbox(p.dataUrl)} className="group relative aspect-square rounded-xl overflow-hidden">
-                <img src={p.dataUrl} alt={`Foto de ${p.author}`} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" loading="lazy" />
+              <button key={p.id} onClick={() => setLightbox(p.url)} className="group relative aspect-square rounded-xl overflow-hidden">
+                <img src={p.url} alt={`Foto de ${p.author}`} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" loading="lazy" />
                 <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-foreground/60 to-transparent p-2">
                   <span className="text-xs text-primary-foreground font-medium">{p.author}</span>
                 </div>

@@ -1,16 +1,18 @@
 import { useEffect, useRef, useState } from 'react';
 import confetti from 'canvas-confetti';
-import { store, type Wish } from '@/lib/store';
 import { ArrowDown } from 'lucide-react';
+import { supabase } from '@/integrations/supabase/client';
 
-interface Props { name: string; onContinue: () => void }
+interface Wish { id: string; message: string; author: string; emoji: string }
+interface Props { name: string; partyId: string; onContinue: () => void }
 
-export default function CelebrationScreen({ name, onContinue }: Props) {
+export default function CelebrationScreen({ name, partyId, onContinue }: Props) {
   const [wishes, setWishes] = useState<Wish[]>([]);
   const firedRef = useRef(false);
 
   useEffect(() => {
-    setWishes(store.getWishes().filter(w => w.approved));
+    supabase.from('wishes').select('id,message,author,emoji').eq('party_id', partyId).eq('approved', true)
+      .then(({ data }) => setWishes(data ?? []));
     if (firedRef.current) return;
     firedRef.current = true;
     const end = Date.now() + 5000;
@@ -20,12 +22,12 @@ export default function CelebrationScreen({ name, onContinue }: Props) {
       if (Date.now() < end) requestAnimationFrame(frame);
     };
     frame();
-  }, []);
+  }, [partyId]);
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-primary/20 via-background to-card">
       <section className="min-h-screen flex flex-col items-center justify-center text-center px-4 py-12 animate-fade-in-up">
-        <p className="text-muted-foreground text-sm tracking-widest uppercase mb-4">✨ 18 de Agosto de 2026 ✨</p>
+        <p className="text-muted-foreground text-sm tracking-widest uppercase mb-4">✨ ¡El gran día! ✨</p>
         <h1 className="font-heading text-5xl sm:text-7xl font-bold mb-2">¡Feliz Cumpleaños!</h1>
         <h2 className="font-heading text-3xl sm:text-5xl font-semibold text-primary italic mb-6">{name}</h2>
         <p className="text-lg text-muted-foreground max-w-xl mb-10">

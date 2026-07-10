@@ -14,16 +14,307 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      gifts: {
+        Row: {
+          author: string
+          created_at: string
+          id: string
+          message: string
+          party_id: string
+          type: string
+        }
+        Insert: {
+          author: string
+          created_at?: string
+          id?: string
+          message?: string
+          party_id: string
+          type: string
+        }
+        Update: {
+          author?: string
+          created_at?: string
+          id?: string
+          message?: string
+          party_id?: string
+          type?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "gifts_party_id_fkey"
+            columns: ["party_id"]
+            isOneToOne: false
+            referencedRelation: "parties"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      guests: {
+        Row: {
+          confirmed: boolean
+          created_at: string
+          email: string | null
+          id: string
+          name: string
+          party_id: string
+          phone: string | null
+        }
+        Insert: {
+          confirmed?: boolean
+          created_at?: string
+          email?: string | null
+          id?: string
+          name: string
+          party_id: string
+          phone?: string | null
+        }
+        Update: {
+          confirmed?: boolean
+          created_at?: string
+          email?: string | null
+          id?: string
+          name?: string
+          party_id?: string
+          phone?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "guests_party_id_fkey"
+            columns: ["party_id"]
+            isOneToOne: false
+            referencedRelation: "parties"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      parties: {
+        Row: {
+          birthday_date: string
+          created_at: string
+          hero_message: string
+          id: string
+          mercado_pago_link: string
+          music_enabled: boolean
+          name: string
+          owner_id: string
+          slug: string
+          transfer_alias: string
+          transfer_cbu: string
+          updated_at: string
+          wishlist_items: string[]
+        }
+        Insert: {
+          birthday_date: string
+          created_at?: string
+          hero_message?: string
+          id?: string
+          mercado_pago_link?: string
+          music_enabled?: boolean
+          name: string
+          owner_id: string
+          slug: string
+          transfer_alias?: string
+          transfer_cbu?: string
+          updated_at?: string
+          wishlist_items?: string[]
+        }
+        Update: {
+          birthday_date?: string
+          created_at?: string
+          hero_message?: string
+          id?: string
+          mercado_pago_link?: string
+          music_enabled?: boolean
+          name?: string
+          owner_id?: string
+          slug?: string
+          transfer_alias?: string
+          transfer_cbu?: string
+          updated_at?: string
+          wishlist_items?: string[]
+        }
+        Relationships: []
+      }
+      photos: {
+        Row: {
+          approved: boolean
+          author: string
+          created_at: string
+          id: string
+          party_id: string
+          url: string
+        }
+        Insert: {
+          approved?: boolean
+          author: string
+          created_at?: string
+          id?: string
+          party_id: string
+          url: string
+        }
+        Update: {
+          approved?: boolean
+          author?: string
+          created_at?: string
+          id?: string
+          party_id?: string
+          url?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "photos_party_id_fkey"
+            columns: ["party_id"]
+            isOneToOne: false
+            referencedRelation: "parties"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      profiles: {
+        Row: {
+          created_at: string
+          email: string | null
+          full_name: string | null
+          id: string
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          email?: string | null
+          full_name?: string | null
+          id: string
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          email?: string | null
+          full_name?: string | null
+          id?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      subscriptions: {
+        Row: {
+          amount: number
+          created_at: string
+          expires_at: string | null
+          id: string
+          notes: string | null
+          party_id: string
+          plan: string
+          starts_at: string
+          status: string
+          updated_at: string
+        }
+        Insert: {
+          amount?: number
+          created_at?: string
+          expires_at?: string | null
+          id?: string
+          notes?: string | null
+          party_id: string
+          plan: string
+          starts_at?: string
+          status?: string
+          updated_at?: string
+        }
+        Update: {
+          amount?: number
+          created_at?: string
+          expires_at?: string | null
+          id?: string
+          notes?: string | null
+          party_id?: string
+          plan?: string
+          starts_at?: string
+          status?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "subscriptions_party_id_fkey"
+            columns: ["party_id"]
+            isOneToOne: false
+            referencedRelation: "parties"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      user_roles: {
+        Row: {
+          created_at: string
+          id: string
+          role: Database["public"]["Enums"]["app_role"]
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          role: Database["public"]["Enums"]["app_role"]
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          role?: Database["public"]["Enums"]["app_role"]
+          user_id?: string
+        }
+        Relationships: []
+      }
+      wishes: {
+        Row: {
+          approved: boolean
+          author: string
+          created_at: string
+          emoji: string
+          id: string
+          message: string
+          party_id: string
+        }
+        Insert: {
+          approved?: boolean
+          author: string
+          created_at?: string
+          emoji?: string
+          id?: string
+          message: string
+          party_id: string
+        }
+        Update: {
+          approved?: boolean
+          author?: string
+          created_at?: string
+          emoji?: string
+          id?: string
+          message?: string
+          party_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "wishes_party_id_fkey"
+            columns: ["party_id"]
+            isOneToOne: false
+            referencedRelation: "parties"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
     }
     Views: {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      has_role: {
+        Args: {
+          _role: Database["public"]["Enums"]["app_role"]
+          _user_id: string
+        }
+        Returns: boolean
+      }
     }
     Enums: {
-      [_ in never]: never
+      app_role: "super_admin" | "quinceanera" | "invitado"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -150,6 +441,8 @@ export type CompositeTypes<
 
 export const Constants = {
   public: {
-    Enums: {},
+    Enums: {
+      app_role: ["super_admin", "quinceanera", "invitado"],
+    },
   },
 } as const

@@ -8,7 +8,7 @@ import Landing from "./pages/Landing";
 import Auth from "./pages/Auth";
 import AdminHome from "./pages/AdminHome";
 import MyParty from "./pages/MyParty";
-import PartyView from "./pages/PartyView";
+import GuestView from "./pages/GuestView";
 import NotFound from "./pages/NotFound.tsx";
 
 const queryClient = new QueryClient();
@@ -25,7 +25,7 @@ const App = () => (
             <Route path="/auth" element={<Auth />} />
             <Route path="/admin" element={<AdminHome />} />
             <Route path="/mi-fiesta" element={<MyParty />} />
-            <Route path="/fiesta/:slug" element={<PartyView />} />
+            <Route path="/invitado/:codigo" element={<GuestView />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
         </AuthProvider>

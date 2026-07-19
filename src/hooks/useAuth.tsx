@@ -2,50 +2,66 @@ import { createContext, useContext, useEffect, useState, ReactNode } from 'react
 import type { Session, User } from '@supabase/supabase-js';
 import { supabase } from '@/integrations/supabase/client';
 
-type AppRole = 'super_admin' | 'quinceanera' | 'invitado';
+export type AppRole = 'admin' | 'cumpleanera';
+
+interface UsuarioRow {
+  id: string;
+  nombre: string;
+  email: string | null;
+  rol: AppRole;
+}
 
 interface AuthCtx {
   session: Session | null;
   user: User | null;
-  roles: AppRole[];
+  usuario: UsuarioRow | null;
+  rol: AppRole | null;
   loading: boolean;
   signOut: () => Promise<void>;
-  refreshRoles: () => Promise<void>;
+  refresh: () => Promise<void>;
 }
 
 const Ctx = createContext<AuthCtx>({
-  session: null, user: null, roles: [], loading: true,
-  signOut: async () => {}, refreshRoles: async () => {},
+  session: null, user: null, usuario: null, rol: null, loading: true,
+  signOut: async () => {}, refresh: async () => {},
 });
 
 export function AuthProvider({ children }: { children: ReactNode }) {
   const [session, setSession] = useState<Session | null>(null);
-  const [roles, setRoles] = useState<AppRole[]>([]);
+  const [usuario, setUsuario] = useState<UsuarioRow | null>(null);
   const [loading, setLoading] = useState(true);
 
-  const loadRoles = async (uid: string | undefined) => {
-    if (!uid) { setRoles([]); return; }
-    const { data } = await supabase.from('user_roles').select('role').eq('user_id', uid);
-    setRoles((data ?? []).map(r => r.role as AppRole));
+  const loadUsuario = async (uid: string | undefined) => {
+    if (!uid) { setUsuario(null); return; }
+    const { data } = await supabase
+      .from('usuarios')
+      .select('id, nombre, email, rol')
+      .eq('id', uid)
+      .maybeSingle();
+    setUsuario((data as UsuarioRow) ?? null);
   };
 
   useEffect(() => {
     const { data: sub } = supabase.auth.onAuthStateChange((_evt, s) => {
       setSession(s);
-      setTimeout(() => loadRoles(s?.user?.id), 0);
+      setTimeout(() => loadUsuario(s?.user?.id), 0);
     });
     supabase.auth.getSession().then(({ data }) => {
       setSession(data.session);
-      loadRoles(data.session?.user?.id).finally(() => setLoading(false));
+      loadUsuario(data.session?.user?.id).finally(() => setLoading(false));
     });
     return () => sub.subscription.unsubscribe();
   }, []);
 
   return (
     <Ctx.Provider value={{
-      session, user: session?.user ?? null, roles, loading,
+      session,
+      user: session?.user ?? null,
+      usuario,
+      rol: usuario?.rol ?? null,
+      loading,
       signOut: async () => { await supabase.auth.signOut(); },
-      refreshRoles: async () => loadRoles(session?.user?.id),
+      refresh: async () => loadUsuario(session?.user?.id),
     }}>{children}</Ctx.Provider>
   );
 }

@@ -1,32 +1,52 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { supabase } from '@/integrations/supabase/client';
+import { useAuth } from '@/hooks/useAuth';
 import { toast } from 'sonner';
 
 export default function Auth() {
   const nav = useNavigate();
+  const { usuario, rol, loading } = useAuth();
   const [mode, setMode] = useState<'signin' | 'signup'>('signin');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [fullName, setFullName] = useState('');
   const [busy, setBusy] = useState(false);
 
+  // Redirección automática si ya hay sesión activa al entrar a /auth
+  useEffect(() => {
+    if (!loading && rol) {
+      nav(rol === 'admin' ? '/admin' : '/mi-fiesta', { replace: true });
+    }
+  }, [loading, rol, nav]);
+
+  // Redirección automática después del login según el rol cargado
+  useEffect(() => {
+    if (rol) {
+      nav(rol === 'admin' ? '/admin' : '/mi-fiesta', { replace: true });
+    }
+  }, [rol, nav]);
+
   const submit = async (e: React.FormEvent) => {
     e.preventDefault();
     setBusy(true);
     try {
       if (mode === 'signup') {
-        const { error } = await supabase.auth.signUp({
+        const { data, error } = await supabase.auth.signUp({
           email, password,
           options: { emailRedirectTo: window.location.origin, data: { full_name: fullName } },
         });
         if (error) throw error;
+        if (!data.session) {
+          toast.success('Cuenta creada. Revisá tu email para confirmar y acceder.');
+          return;
+        }
         toast.success('Cuenta creada. Redirigiendo…');
       } else {
         const { error } = await supabase.auth.signInWithPassword({ email, password });
         if (error) throw error;
+        toast.success('Ingresaste correctamente. Redirigiendo…');
       }
-      nav('/');
     } catch (err) {
       toast.error((err as Error).message);
     } finally { setBusy(false); }
@@ -62,3 +82,4 @@ export default function Auth() {
     </div>
   );
 }
+

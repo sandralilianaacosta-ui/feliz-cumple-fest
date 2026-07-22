@@ -15,7 +15,7 @@ export default function MyParty() {
   const [evento, setEvento] = useState<Evento | null>(null);
   const [invitados, setInvitados] = useState<Invitado[]>([]);
   const [interacciones, setInteracciones] = useState<Interaccion[]>([]);
-  const [tab, setTab] = useState<'countdown' | 'invitados' | 'interacciones'>('countdown');
+  const [tab, setTab] = useState<'countdown' | 'invitacion' | 'invitados' | 'interacciones'>('countdown');
   const [countdown, setCountdown] = useState({ d: 0, h: 0, m: 0, s: 0, past: false });
 
   const load = async () => {

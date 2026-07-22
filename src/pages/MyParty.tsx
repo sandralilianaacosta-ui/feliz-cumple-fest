@@ -120,6 +120,10 @@ export default function MyParty() {
           </div>
         )}
 
+        {tab === 'invitacion' && (
+          <InvitacionPanel evento={evento} invitados={invitados} origin={origin} onChange={load} />
+        )}
+
         {tab === 'invitados' && (
           <InvitadosPanel eventoId={evento.id} invitados={invitados} onChange={load} origin={origin} />
         )}

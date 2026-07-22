@@ -110,11 +110,11 @@ export default function GuestView() {
           </p>
         </div>
 
-        <div className="glass rounded-2xl p-6 mb-6 text-center">
+     {/*  <div className="glass rounded-2xl p-6 mb-6 text-center">
           <button onClick={confirmar} className="bg-primary text-primary-foreground px-6 py-2 rounded-full font-medium">
             ✨ Confirmar asistencia
           </button>
-        </div>
+        </div>*/}
 
         <div className="glass rounded-2xl p-6 mb-6 space-y-3">
           <h2 className="font-heading text-2xl font-bold">💌 Dejale un mensaje</h2>

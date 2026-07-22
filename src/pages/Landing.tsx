@@ -34,7 +34,7 @@ export default function Landing() {
               )}
               {usuario?.rol === 'cumpleanera' && (
                 <Link to="/mi-fiesta" className="bg-secondary text-secondary-foreground px-6 py-2 rounded-full font-medium">
-                  🎂 Mi Fiesta
+                  🎂 Mis Quince Años!!
                 </Link>
               )}
               {!usuario && (

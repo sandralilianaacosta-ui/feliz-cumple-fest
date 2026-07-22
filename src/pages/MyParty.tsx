@@ -89,6 +89,7 @@ export default function MyParty() {
         <div className="flex gap-2 flex-wrap mb-6">
           {([
             ['countdown', '⏳ Contador'],
+            ['invitacion', '💌 Mi Invitación'],
             ['invitados', `👥 Invitados (${invitados.length})`],
             ['interacciones', `💌 Interacciones (${interacciones.length})`],
           ] as const).map(([t, label]) => (

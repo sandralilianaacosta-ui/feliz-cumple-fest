@@ -70,7 +70,7 @@ export default function MyParty() {
   if (!evento) return (
     <div className="min-h-screen flex flex-col items-center justify-center gap-4 px-4 text-center">
       <p>Todavía no tenés un evento creado.</p>
-      <p className="text-sm text-muted-foreground">Pedile al administrador que cree tu fiesta.</p>
+      <p className="text-sm text-muted-foreground">Pedile al administrador que cree tu Evento.</p>
       <button onClick={signOut} className="text-muted-foreground text-sm">Salir</button>
     </div>
   );

@@ -80,7 +80,7 @@ export default function MyParty() {
       <div className="max-w-4xl mx-auto">
         <header className="flex items-center justify-between mb-8">
           <div>
-            <h1 className="font-heading text-3xl font-bold">🎂 Mi Fiesta</h1>
+            <h1 className="font-heading text-3xl font-bold">🎂Mis Quince!</h1>
             <p className="text-sm text-muted-foreground">{evento.nombre_evento} · {new Date(evento.fecha_cumpleanos).toLocaleString()}</p>
           </div>
           <button onClick={signOut} className="text-sm text-muted-foreground">Salir</button>
